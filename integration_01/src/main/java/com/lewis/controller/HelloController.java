@@ -16,6 +16,7 @@ public class HelloController {
     public String sayHello(Model model){
         model.addAttribute("name","lewis");
         model.addAttribute("person",new Person(1000,"lewis","male"));
+        System.out.println("hello ,i am hello controller");
         return "hello";
     }
 }

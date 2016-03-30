@@ -4,10 +4,10 @@
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xmlns:beans="http://www.springframework.org/schema/beans"
              xmlns:context="http://www.springframework.org/schema/context"
-             xmlns:mvc="http://www.springframework.org/schema/mvc"
+             xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:aop="http://www.springframework.org/schema/aop"
              xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
 
     <!-- Enables the Spring MVC @Controller programming model -->
     <annotation-driven />
@@ -23,5 +23,18 @@
         <beans:property name="prefix" value="/WEB-INF/views/" />
         <beans:property name="suffix" value=".jsp" />
     </beans:bean>
+
+    <!-- 要拦截mvc的Controller的话，必须在 mvc配置文件中配置 AOP,或者在mvc配置文件中引入 import AOP的配置文件
+    <aop:aspectj-autoproxy />
+    -->
+    <!--
+    <aop:config proxy-target-class="true">
+        <aop:aspect ref="cacheBean">
+            <aop:pointcut id="cachePointcut" expression="execution(* com.lewis.controller.*.*(..))"></aop:pointcut>
+            <aop:around method="doSomething" pointcut-ref="cachePointcut" arg-names="joinPoint"></aop:around>
+        </aop:aspect>
+    </aop:config>-->
+
+    <beans:import resource="spring-aop.xml"/>
 
 </beans:beans>

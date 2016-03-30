@@ -36,6 +36,40 @@
                 </tr>
            </c:forEach>
    </table>
+    <br/>
+   人物：
+   <table >
+       <tr>
+           <th>Id</th>
+           <th>name</th>
+           <th>sex</th>
+       </tr>
+       <c:forEach items="${personList}" var="person">
+           <tr>
+               <td>${person.id}</td>
+               <td>${person.name}</td>
+               <td>${person.sex}</td>
+           </tr>
+       </c:forEach>
+   </table>
+    <br/>
+   旅游记录：
+   <table >
+       <tr>
+           <th>Id</th>
+           <th>userId</th>
+           <th>travelDate</th>
+           <th>fee</th>
+           <th>days</th>
+       </tr>
+           <tr>
+               <td>${travelRecord.id}</td>
+               <td>${travelRecord.userId}</td>
+               <td>${travelRecord.travelDate}</td>
+               <td>${travelRecord.fee}</td>
+               <td>${travelRecord.days}</td>
+           </tr>
+   </table>
     <input type="hidden" id="ctx" value="<%=basePath%>"/>
     <script type="text/javascript" src="<%=basePath%>/js/jquery.min.js"></script>
     <script type="text/javascript" src="<%=basePath%>/js/list.js"></script>

@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/cache"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-       http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd">
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
 
+    <bean id="cacheBean" class="com.lewis.aop.CacheAspect"></bean>
 
+    <aop:config proxy-target-class="true">
+        <aop:aspect ref="cacheBean">
+            <aop:pointcut id="cachePointcut" expression="execution(* com.lewis.controller.*.*(..))"></aop:pointcut>
+            <aop:around method="doSomething" pointcut-ref="cachePointcut" arg-names="joinPoint"></aop:around>
+        </aop:aspect>
+    </aop:config>
 
+    <aop:aspectj-autoproxy />
 </beans>
