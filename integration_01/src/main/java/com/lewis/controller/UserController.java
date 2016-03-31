@@ -11,6 +11,7 @@ import com.lewis.vo.User;
 import org.hibernate.ejb.criteria.expression.ListIndexExpression;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import javax.annotation.Resource;
@@ -62,6 +63,11 @@ public class UserController {
         return "userlist";
     }
 
+    @RequestMapping("/delete/{id}")
+    public String  deleteUser(@PathVariable( )String id){
+        System.out.println("id = "+id);
 
+        return "redirect:/user/all";
+    }
 
 }

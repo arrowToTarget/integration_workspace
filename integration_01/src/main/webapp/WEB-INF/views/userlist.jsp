@@ -26,13 +26,15 @@
                    <th>name</th>
                    <th>brithday</th>
                    <th>hobby</th>
+                   <th>operation</th>
            </tr>
            <c:forEach items="${users}" var="user" >
                 <tr>
-                        <td>${user.id}</td>
+                        <td class="idClass">${user.id}</td>
                         <td>${user.name}</td>
                         <td>${user.birthday}</td>
                         <td>${user.hobby}</td>
+                        <td><input type="button" value="delete" class="delete"/></td>
                 </tr>
            </c:forEach>
    </table>

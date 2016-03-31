@@ -1,4 +1,5 @@
 $(function(){
+
     $('.update').click(function(){
         var trEle = $(this).parent().parent();
         var tdEles = trEle.children();
@@ -48,9 +49,9 @@ $(function(){
     $('.delete').click(function(){
         var trEle = $(this).parent().parent();
         var tdEles = trEle.children();
-        var nameEleTd = tdEles[1];
-        var name = nameEleTd.innerHTML;
-        var url ='http://localhost:8081/config/delete?name='+name;
+        var nameEleTd = tdEles[0];
+        var id = nameEleTd.innerHTML;
+        var url ='http://localhost:8081/web/user/delete/'+id;
         window.location.href = url;
     });
 
