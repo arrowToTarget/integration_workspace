@@ -70,6 +70,12 @@
                <td>${travelRecord.days}</td>
            </tr>
    </table>
+   <br/>
+   Map:
+   <br/>
+   <c:forEach items="${map}" var="entry">
+       ${entry.key} : ${entry.value}  <br/>
+   </c:forEach>
     <input type="hidden" id="ctx" value="<%=basePath%>"/>
     <script type="text/javascript" src="<%=basePath%>/js/jquery.min.js"></script>
     <script type="text/javascript" src="<%=basePath%>/js/list.js"></script>

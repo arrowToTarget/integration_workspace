@@ -1,7 +1,6 @@
 package com.lewis.aop;
 
 import com.lewis.annotation.CacheAnnotations;
-import com.lewis.annotation.CollectionType;
 import com.lewis.service.ICacheService;
 import com.lewis.vo.CacheVo;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -29,14 +28,10 @@ public class DefaultCacheAspect {
         if (args != null && args.length > 0) {
             for (Object arg : args) {
                 if (arg != null && arg instanceof BindingAwareModelMap) {
-                    System.out.println("param Type: " + arg.getClass().getName());
                     modelMap = (BindingAwareModelMap) arg;
                 }
             }
         }
-        String keyPre = cacheAnnotations.name();
-        Class<?> elementType = cacheAnnotations.elementType();
-        CollectionType collectionType = cacheAnnotations.collectionType();
         Object proceed = null;
         //一般使用model向页面传递数据
         if (modelMap != null) {
@@ -45,7 +40,7 @@ public class DefaultCacheAspect {
             if (cachekeyIndexList != null && cachekeyIndexList.size() > 0) {
                 for (CacheVo cacheVo : cachekeyIndexList) {
                     if (cacheVo.getValueType() == List.class) {
-                        List<?> listCache = cacheService.getListCache(cacheVo.getKey(), cacheVo.getValueType());
+                        List<?> listCache = cacheService.getListCache(cacheVo.getKey(), cacheVo.getElementType());
                         modelMap.addAttribute(cacheVo.getKey(), listCache);
                     }else{
                         Object cache = cacheService.getCache(cacheVo.getKey(), cacheVo.getValueType());
@@ -70,19 +65,20 @@ public class DefaultCacheAspect {
         while (it.hasNext()) {
             Map.Entry<String, Object> entry = it.next();
             Object value = entry.getValue();
-            Class<?> valueElementType = null;
+            Class<?> valueType = null;
+            Class<?> elementType = null;
             if (value instanceof List) {
-                valueElementType = List.class;
+                valueType = List.class;
                 List listValue = (List) value;
                 for (Object element : listValue) {
-                    valueElementType = element.getClass();
+                    elementType = element.getClass();
                     break;
                 }
             } else {
-                valueElementType = value.getClass();
+                elementType = value.getClass();
             }
             cacheService.setCache(entry.getKey(), entry.getValue(), cacheAnnotations.expireTime());
-            cacheKeyIndexList.add(new CacheVo(entry.getKey(), valueElementType));
+            cacheKeyIndexList.add(new CacheVo(entry.getKey(),valueType,elementType));
         }
         //设置缓存索引
         cacheService.setCache(cacheAnnotations.name(), cacheKeyIndexList, cacheAnnotations.expireTime());

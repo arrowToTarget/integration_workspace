@@ -10,6 +10,16 @@ public class CacheVo {
 
     private Class<?> valueType;
 
+    private Class<?> elementType;
+
+    public Class<?> getElementType() {
+        return elementType;
+    }
+
+    public void setElementType(Class<?> elementType) {
+        this.elementType = elementType;
+    }
+
     public String getKey() {
         return key;
     }
@@ -26,9 +36,10 @@ public class CacheVo {
         this.valueType = valueType;
     }
 
-    public CacheVo(String key,  Class<?> valueType) {
+    public CacheVo(String key, Class<?> valueType, Class<?> elementType) {
         this.key = key;
         this.valueType = valueType;
+        this.elementType = elementType;
     }
 
     public CacheVo() {

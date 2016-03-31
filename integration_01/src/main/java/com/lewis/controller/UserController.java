@@ -14,8 +14,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by zhangminghua on 2016/3/29.
@@ -28,7 +30,7 @@ public class UserController {
     private IUserService userService;
 
     @RequestMapping("/all")
-    @CacheAnnotations(name = "allUsers" ,expireTime = 600,elementType = User.class,collectionType = CollectionType.List,returnAddress = "userlist")
+    @CacheAnnotations(name = "allUsers" ,expireTime = 600,returnAddress = "userlist")
     public String queryallUsers(Model model, @RequestParam(value = "name",required = false)String searchName, @RequestParam(value = "hobby",required = false)String hobby){
         User user = new User();
         user.setName(searchName);
@@ -50,6 +52,13 @@ public class UserController {
         travelRecord.setTravelDate("2016-03-30");
         travelRecord.setUserId(100001);
         model.addAttribute("travelRecord" ,travelRecord);
+
+        Map<String,String> map = new HashMap<String, String>();
+        map.put("name","lewis");
+        map.put("age ","12");
+        map.put("sex","male");
+        map.put("hobbby","sing");
+        model.addAttribute("map",map);
         return "userlist";
     }
 

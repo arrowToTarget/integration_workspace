@@ -17,9 +17,5 @@ public @interface CacheAnnotations {
 
     int expireTime();
 
-    Class<?> elementType() default Object.class;
-
-    CollectionType collectionType();
-
     String returnAddress();
 }
