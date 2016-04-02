@@ -43,10 +43,12 @@
         <jms:listener destination="${mq.queueDestination}" ref="queueReceiver2" />
     </jms:listener-container>
 
+    <bean id="topicUserReceiver" class="com.lewis.mq.consumer.topic.TopicUserReceiver"/>
     <!-- 定义Topic监听器 -->
     <jms:listener-container destination-type="topic" container-type="default" connection-factory="connectionFactory" acknowledge="auto">
         <jms:listener destination="${mq.topicDestination}" ref="topicReceiver1" />
         <jms:listener destination="${mq.topicDestination}" ref="topicReceiver2" />
+        <jms:listener destination="topic.user" ref="topicUserReceiver"/>
     </jms:listener-container>
     <!-- 消息消费者 end-->
 

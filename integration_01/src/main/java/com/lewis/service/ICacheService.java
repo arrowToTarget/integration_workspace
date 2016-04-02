@@ -13,4 +13,6 @@ public interface ICacheService {
 
     void setCache(String key,Object value,int expireTime);
 
+    void delCache(String key);
+
 }

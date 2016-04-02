@@ -1,14 +1,10 @@
 package com.lewis.controller;
 
 import com.lewis.annotation.CacheAnnotations;
-import com.lewis.annotation.CollectionType;
 import com.lewis.service.IUserService;
-import com.lewis.util.CacheUtil;
-import com.lewis.util.JsonUtil;
 import com.lewis.vo.Person;
 import com.lewis.vo.TravelRecord;
 import com.lewis.vo.User;
-import org.hibernate.ejb.criteria.expression.ListIndexExpression;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;

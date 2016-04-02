@@ -52,4 +52,12 @@ public class CacheServiceImpl implements ICacheService {
             log.error("setCache error {} {}",e,key);
         }
     }
+
+    public void delCache(String key) {
+        try {
+            cacheUtil.delCache(key);
+        } catch (Exception e) {
+            log.error("delCache error {} {}",e,key);
+        }
+    }
 }
