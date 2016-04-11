@@ -15,4 +15,15 @@ public interface ICacheService {
 
     void delCache(String key);
 
+    void lpush(String key, int expireTime,List values);
+
+    void rpush(String key, int expireTime,List values);
+
+    void lpush(String key, int expireTime,Class<?> type, Object... values);
+
+    void rpush(String key, int expireTime,Class<?> type,Object... values);
+
+    <T> List<T> getListValueAll(String key,Class<T> type);
+
+    <T> List<T> getListValueRange(String key,int beginIdx,int endIdx,Class<T> type);
 }
