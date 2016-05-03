@@ -50,6 +50,7 @@ public class CacheVo {
         return "CacheVo{" +
                 "key='" + key + '\'' +
                 ", valueType=" + valueType +
+                ", elementType=" + elementType +
                 '}';
     }
 }

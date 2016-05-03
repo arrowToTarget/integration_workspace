@@ -2,7 +2,9 @@ package com.lewis.aop;
 
 import com.lewis.annotation.CacheAnnotations;
 import com.lewis.service.ICacheService;
+import com.lewis.util.StringUtils;
 import com.lewis.vo.CacheVo;
+import com.lewis.vo.ResponseVo;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -40,20 +42,43 @@ public class DefaultCacheAspect {
             if (cachekeyIndexList != null && cachekeyIndexList.size() > 0) {
                 for (CacheVo cacheVo : cachekeyIndexList) {
                     if (cacheVo.getValueType() == List.class) {
-                        List<?> listCache = cacheService.getListCache(cacheVo.getKey(), cacheVo.getElementType());
-                        modelMap.addAttribute(cacheVo.getKey(), listCache);
+                        List<?> listValueAll = cacheService.getListValueAll(cacheVo.getKey(), cacheVo.getElementType());
+                        modelMap.addAttribute(cacheVo.getKey(), listValueAll);
+                    }else if (cacheVo.getValueType() == null){
+                        Object cache = cacheService.getCache(cacheVo.getKey(), cacheVo.getElementType());
+                        if (cache != null) {
+                            modelMap.addAttribute(cacheVo.getKey(),cache);
+                        }
                     }else{
                         Object cache = cacheService.getCache(cacheVo.getKey(), cacheVo.getValueType());
-                        modelMap.addAttribute(cacheVo.getKey(),cache);
+                        if (cache != null) {
+                            modelMap.addAttribute(cacheVo.getKey(),cache);
+                        }
                     }
                 }
             }
             if (modelMap.size() == 0) {
                 proceed = joinPoint.proceed();
+                Object target = joinPoint.getTarget();
+                System.out.println("target = "+target);
                 setCacheAfterExecutionDB(cacheAnnotations, modelMap);
                 return proceed;
             }
-            return cacheAnnotations.returnAddress();
+            if (StringUtils.isNotEmpty(cacheAnnotations.returnAddress())) {
+                return cacheAnnotations.returnAddress();
+            }
+        }else{
+            //不用modelMap向页面返回东西，而是直接返回对象
+            Object cache = cacheService.getCache(cacheAnnotations.name(), cacheAnnotations.returnObjectType());
+            if (cache != null) {
+                return cache;
+            }else{
+                Object result = joinPoint.proceed();
+                System.out.println("target className ="+result.getClass().getName());
+                System.out.println("target class ="+result.getClass());
+                cacheService.setCache(cacheAnnotations.name(),result,cacheAnnotations.expireTime());
+                return result;
+            }
         }
         return proceed;
     }
@@ -77,7 +102,12 @@ public class DefaultCacheAspect {
             } else {
                 elementType = value.getClass();
             }
-            cacheService.setCache(entry.getKey(), entry.getValue(), cacheAnnotations.expireTime());
+            if (valueType == List.class) {
+                List listValue = (List) entry.getValue();
+                cacheService.lpush(entry.getKey(),cacheAnnotations.expireTime(),listValue);
+            }else{
+                cacheService.setCache(entry.getKey(), entry.getValue(), cacheAnnotations.expireTime());
+            }
             cacheKeyIndexList.add(new CacheVo(entry.getKey(),valueType,elementType));
         }
         //设置缓存索引

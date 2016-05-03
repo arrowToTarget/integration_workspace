@@ -8,14 +8,9 @@ import org.aspectj.lang.ProceedingJoinPoint;
 public class CacheAspect {
 
     public Object doSomething(ProceedingJoinPoint joinPoint) throws Throwable {
-        System.out.println("================");
-        System.out.println("================");
         System.out.println("before invoke ");
         Object proceed = joinPoint.proceed();
-
-        System.out.println("++++++++++++");
-        System.out.println("++++++++++++");
-        System.out.println("++++++++++++");
+        System.out.println("after invoke ");
         return proceed;
     }
 

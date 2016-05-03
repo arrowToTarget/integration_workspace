@@ -1,5 +1,7 @@
 package com.lewis.vo;
 
+import com.lewis.util.JsonUtil;
+
 /**
  * Created by zhangminghua on 2016/3/28.
  */
@@ -50,5 +52,10 @@ public class Person {
 
     public void setSex(String sex) {
         this.sex = sex;
+    }
+
+    public static void main(String[] args) {
+        Person p = new Person(100,"lewis","male");
+        System.out.println(JsonUtil.toString(p));
     }
 }

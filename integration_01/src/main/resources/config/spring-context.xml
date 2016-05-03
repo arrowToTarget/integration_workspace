@@ -11,4 +11,8 @@
     <import resource="classpath:config/spring-cache.xml"/>
     <import resource="classpath:config/spring-activemq.xml"/>
 
+<!--    <bean id="stringHttpMessageConverter" class="org.springframework.http.converter.StringHttpMessageConverter"></bean>
+    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+
+    </bean>-->
 </beans>

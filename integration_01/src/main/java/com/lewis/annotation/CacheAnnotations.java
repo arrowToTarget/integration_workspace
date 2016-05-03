@@ -1,5 +1,7 @@
 package com.lewis.annotation;
 
+import com.lewis.vo.ResponseVo;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -17,5 +19,7 @@ public @interface CacheAnnotations {
 
     int expireTime();
 
-    String returnAddress();
+    String returnAddress() default "";
+
+    Class returnObjectType() default ResponseVo.class;
 }

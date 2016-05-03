@@ -1,10 +1,21 @@
 package com.lewis.util;
 
+import com.lewis.vo.Person;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.ListUtils;
+import org.apache.commons.collections.iterators.ObjectArrayIterator;
+import org.jasypt.commons.CommonUtils;
 import org.springframework.stereotype.Component;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.Pipeline;
+import redis.clients.jedis.Response;
+
 import javax.annotation.Resource;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by zhangminghua on 2016/3/29.
@@ -202,6 +213,90 @@ public class CacheUtil {
         try {
             jedis = jedisPool.getResource();
             return jedis.lrange(key,0,-1);
+        } catch (Exception e) {
+            broken(jedis);
+            throw new RuntimeException(e);
+        } finally {
+            release(jedis);
+        }
+    }
+
+    public Map<byte[],byte[]> getResultBytesMap(byte[] bytes){
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            return jedis.hgetAll(bytes);
+        } catch (Exception e) {
+            broken(jedis);
+            throw new RuntimeException(e);
+        } finally {
+            release(jedis);
+        }
+    }
+
+    public Map<String,String> getResultStringMap(String key){
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            return jedis.hgetAll(key);
+        } catch (Exception e) {
+            broken(jedis);
+            throw new RuntimeException(e);
+        } finally {
+            release(jedis);
+        }
+    }
+
+    public void setBatchValues(List<Person> persons){
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            Pipeline pipelined = jedis.pipelined();
+            if (persons != null && persons.size() > 0) {
+                for (Person peron : persons) {
+                    pipelined.setex(peron.getName(),6000000,JsonUtil.toString(peron));
+                }
+            }
+        } catch (Exception e) {
+            broken(jedis);
+            throw new RuntimeException(e);
+        } finally {
+            release(jedis);
+        }
+    }
+
+   /* public void setBatchValues(Map<String,Person> map){
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            Pipeline pipelined = jedis.pipelined();
+            if (map != null && map.size() > 0) {
+                Iterator<Map.Entry<String, Person>> it = map.entrySet().iterator();
+                while (it.hasNext()) {
+                    Map.Entry<String, Person> entry = it.next();
+                    pipelined.setex(entry.getKey(),60000,JsonUtil.toString(entry.getValue()));
+                }
+            }
+        } catch (Exception e) {
+            broken(jedis);
+            throw new RuntimeException(e);
+        } finally {
+            release(jedis);
+        }
+    }*/
+
+    public List<Object> getBatchValues(List<String> keys){
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            Pipeline pipelined = jedis.pipelined();
+            if (CollectionUtils.isNotEmpty(keys)) {
+                for (String key : keys) {
+                    pipelined.hgetAll(key);
+                }
+            }
+            List<Object> objects = pipelined.syncAndReturnAll();
+            return objects;
         } catch (Exception e) {
             broken(jedis);
             throw new RuntimeException(e);
