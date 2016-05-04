@@ -120,9 +120,6 @@ public class UserController {
         return users;
     }
 
-
-
-
     @RequestMapping("/delete/{id}")
     public String  deleteUser(@PathVariable( )String id){
         System.out.println("id = "+id);
